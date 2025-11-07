@@ -13,9 +13,12 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
-    <>
+    <div className="container m-auto relative">
       <Header />
-      <Outlet />
+      <div className="h-20" />
+      <div className="p-4">
+        <Outlet />
+      </div>
       <TanStackDevtools
         config={{
           position: 'bottom-right',
@@ -31,6 +34,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           },
         ]}
       />
-    </>
+    </div>
   ),
 })

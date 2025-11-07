@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
+      <header className="absolute top-0 left-0 right-0 p-4 flex items-center bg-gray-100 text-black shadow-lg">
         <button
           onClick={() => setIsOpen(true)}
           className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -18,17 +18,16 @@ export default function Header() {
         </button>
         <h1 className="ml-4 text-xl font-semibold">
           <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
+            <div className="flex items-center">
+              <img src="/logo.jpeg" alt="TanStack Logo" className="h-10 mr-2" />
+              KKM Organizer
+            </div>
           </Link>
         </h1>
       </header>
 
       <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 left-0 h-full w-80 bg-gray-100 text-black shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -50,7 +49,7 @@ export default function Header() {
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
               className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-200 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Home size={20} />
@@ -60,12 +59,12 @@ export default function Header() {
           {/* Demo Links Start */}
 
           <Link
-            to="/demo/tanstack-query"
+            to="/events"
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
               className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-200 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Network size={20} />
@@ -73,12 +72,12 @@ export default function Header() {
           </Link>
 
           <Link
-            to="/demo/table"
+            to="/events"
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
               className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-200 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Table size={20} />
