@@ -8,15 +8,22 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/app/__root'
-import { Route as LoginRouteImport } from './r././routes/app/__root
-import { Route as IndexRouteImport } from './r./routes/app/index
-import { Route as AppEventsIndexRouteImport } from './routes/app/events/indexex
-import { Route as AppEventsEventIdRouteImport } from './routes/app/events/$eventIdId
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppEventsIndexRouteImport } from './routes/app/events/index'
+import { Route as AppEventsEventIdRouteImport } from './routes/app/events/$eventId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -24,49 +31,71 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppEventsIndexRoute = AppEventsIndexRouteImport.update({
-  id: '/app/events/',
-  path: '/app/events/',
-  getParentRoute: () => rootRouteImport,
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppEventsEventIdRoute = AppEventsEventIdRouteImport.update({
-  id: '/app/events/$eventId',
-  path: '/app/events/$eventId',
-  getParentRoute: () => rootRouteImport,
+  id: '/events/$eventId',
+  path: '/events/$eventId',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/': typeof AppIndexRoute
   '/app/events/$eventId': typeof AppEventsEventIdRoute
   '/app/events': typeof AppEventsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app': typeof AppIndexRoute
   '/app/events/$eventId': typeof AppEventsEventIdRoute
   '/app/events': typeof AppEventsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/': typeof AppIndexRoute
   '/app/events/$eventId': typeof AppEventsEventIdRoute
   '/app/events/': typeof AppEventsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/app/events/$eventId' | '/app/events'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/'
+    | '/app/events/$eventId'
+    | '/app/events'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app/events/$eventId' | '/app/events'
-  id: '__root__' | '/' | '/login' | '/app/events/$eventId' | '/app/events/'
+  to: '/' | '/login' | '/app' | '/app/events/$eventId' | '/app/events'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/'
+    | '/app/events/$eventId'
+    | '/app/events/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
-  AppEventsEventIdRoute: typeof AppEventsEventIdRoute
-  AppEventsIndexRoute: typeof AppEventsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,6 +107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -85,28 +121,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/events/': {
       id: '/app/events/'
-      path: '/app/events'
+      path: '/events'
       fullPath: '/app/events'
       preLoaderRoute: typeof AppEventsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/events/$eventId': {
       id: '/app/events/$eventId'
-      path: '/app/events/$eventId'
+      path: '/events/$eventId'
       fullPath: '/app/events/$eventId'
       preLoaderRoute: typeof AppEventsEventIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppEventsEventIdRoute: typeof AppEventsEventIdRoute
+  AppEventsIndexRoute: typeof AppEventsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
   AppEventsEventIdRoute: AppEventsEventIdRoute,
   AppEventsIndexRoute: AppEventsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
