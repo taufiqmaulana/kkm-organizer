@@ -8,49 +8,76 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as rootRouteImport } from './routes/app/__root'
+import { Route as LoginRouteImport } from './r././routes/app/__root
+import { Route as IndexRouteImport } from './r./routes/app/index
+import { Route as AppEventsIndexRouteImport } from './routes/app/events/indexex
+import { Route as AppEventsEventIdRouteImport } from './routes/app/events/$eventIdId
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventsIndexRoute = EventsIndexRouteImport.update({
-  id: '/events/',
-  path: '/events/',
+const AppEventsIndexRoute = AppEventsIndexRouteImport.update({
+  id: '/app/events/',
+  path: '/app/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppEventsEventIdRoute = AppEventsEventIdRouteImport.update({
+  id: '/app/events/$eventId',
+  path: '/app/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/events': typeof EventsIndexRoute
+  '/login': typeof LoginRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events': typeof AppEventsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/events': typeof EventsIndexRoute
+  '/login': typeof LoginRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events': typeof AppEventsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/events/': typeof EventsIndexRoute
+  '/login': typeof LoginRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events/': typeof AppEventsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/events'
+  fullPaths: '/' | '/login' | '/app/events/$eventId' | '/app/events'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/events'
-  id: '__root__' | '/' | '/events/'
+  to: '/' | '/login' | '/app/events/$eventId' | '/app/events'
+  id: '__root__' | '/' | '/login' | '/app/events/$eventId' | '/app/events/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EventsIndexRoute: typeof EventsIndexRoute
+  LoginRoute: typeof LoginRoute
+  AppEventsEventIdRoute: typeof AppEventsEventIdRoute
+  AppEventsIndexRoute: typeof AppEventsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -58,11 +85,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/events/': {
-      id: '/events/'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsIndexRouteImport
+    '/app/events/': {
+      id: '/app/events/'
+      path: '/app/events'
+      fullPath: '/app/events'
+      preLoaderRoute: typeof AppEventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/events/$eventId': {
+      id: '/app/events/$eventId'
+      path: '/app/events/$eventId'
+      fullPath: '/app/events/$eventId'
+      preLoaderRoute: typeof AppEventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EventsIndexRoute: EventsIndexRoute,
+  LoginRoute: LoginRoute,
+  AppEventsEventIdRoute: AppEventsEventIdRoute,
+  AppEventsIndexRoute: AppEventsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
