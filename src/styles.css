@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @plugin "daisyui" {
-  themes: light --default;
+  themes:
+    light,
+    silk --default;
 }
 
 body {
@@ -10,6 +12,10 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('https://images.unsplash.com/photo-1606311512220-a009aaedfb51?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1073');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 code {

@@ -12,7 +12,7 @@ export const Route = createFileRoute('/app')({
     }
   },
   component: () => (
-    <div className="container m-auto relative h-screen flex flex-col">
+    <div className="container m-auto relative h-screen flex flex-col bg-base-200">
       <Header />
       <div className="p-4 grow overflow-y-auto">
         <Outlet />

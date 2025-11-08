@@ -80,13 +80,18 @@ function RouteComponent() {
           Confirmed
         </label>
       </div>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        participants.map((reservation: Record<string, any>) => (
-          <ReservationCard reservation={reservation} key={reservation['id']} />
-        ))
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-2">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          participants.map((reservation: Record<string, any>) => (
+            <ReservationCard
+              reservation={reservation}
+              key={reservation['id']}
+            />
+          ))
+        )}
+      </div>
     </div>
   )
 }
