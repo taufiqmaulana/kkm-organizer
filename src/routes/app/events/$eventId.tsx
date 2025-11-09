@@ -73,6 +73,17 @@ function RouteComponent() {
             type="radio"
             name="status"
             className="checkbox"
+            value="received"
+            checked={status === 'received'}
+            onChange={(e) => setStatus(e.target.value)}
+          />
+          DP 50%
+        </label>
+        <label className="label">
+          <input
+            type="radio"
+            name="status"
+            className="checkbox"
             value="confirmed"
             checked={status === 'confirmed'}
             onChange={(e) => setStatus(e.target.value)}

@@ -1,4 +1,6 @@
 import { fixDateTimeFormat } from '@/lib/utils'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 import {
   Calendar,
   CheckCircle,
@@ -11,6 +13,49 @@ import {
   UserRoundPlus,
 } from 'lucide-react'
 import { useRef } from 'react'
+
+function useUpdatePaymentStatus(reservationId: string) {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: async (status: string) => {
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbw12wkHkS1tkz8SEBdy52t58Y4kGVUKF0kPfL-czfPUtQbOzCBKsRg9KMoD1eWmAALThQ/exec?sheet=Event+Reservation&indexId=24&action=update&id=' +
+          reservationId,
+        {
+          body: JSON.stringify({ 'Reservation Status': status }),
+          method: 'POST',
+        },
+      )
+
+      return await response.json()
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ['reservations'], exact: true })
+    },
+  })
+}
+
+function ReservationStatusBadge({ status }: { status: string }) {
+  if (status === 'confirmed') {
+    return (
+      <span className="badge badge-success">
+        <CheckCircle size={14} /> Confirmed
+      </span>
+    )
+  } else if (status === 'received') {
+    return (
+      <span className="badge badge-info">
+        <CheckCircle size={14} /> 50% Paid
+      </span>
+    )
+  } else {
+    return (
+      <span className="badge badge-warning">
+        <Clock size={14} /> Pending
+      </span>
+    )
+  }
+}
 
 function ReservationLayout({
   reservation,
@@ -27,15 +72,7 @@ function ReservationLayout({
       </div>
       <span>{reservation['Email Address']}</span>
       <div className="flex gap-2 flex-wrap">
-        {reservation['Reservation Status'] === 'confirmed' ? (
-          <span className="badge badge-success">
-            <CheckCircle size={14} /> Confirmed
-          </span>
-        ) : (
-          <span className="badge badge-warning">
-            <Clock size={14} /> Pending
-          </span>
-        )}
+        <ReservationStatusBadge status={reservation['Reservation Status']} />
         {reservation['Jenis Anggota'] === 'Alumni' ? (
           <span className="badge badge-info badge-outline">
             <GraduationCap size={18} /> Alumni
@@ -72,7 +109,21 @@ export default function ReservationCard({
 }: {
   reservation: Record<string, any>
 }) {
+  const { mutateAsync: updatePaymentStatus, isPending } =
+    useUpdatePaymentStatus(reservation['id'])
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const handleUpdatePayment = async () => {
+    if (window.confirm('Are you sure to confirm the reservation ?')) {
+      await updatePaymentStatus(
+        reservation['Reservation Status'] === 'received'
+          ? 'confirmed'
+          : reservation['Pilihan Pembayaran'] === 'DP 50%'
+            ? 'received'
+            : 'confirmed',
+      )
+      dialogRef.current?.close()
+    }
+  }
   return (
     <div>
       <div
@@ -87,17 +138,26 @@ export default function ReservationCard({
           <ReservationLayout reservation={reservation} />
           <div className="modal-action">
             {reservation['Reservation Status'] === 'confirmed' ? (
-              <button className="btn btn-success">
+              <a
+                href={reservation['Link Tiket download']}
+                target="_blank"
+                className="btn btn-success"
+              >
                 <QrCode size={20} /> Download E-Ticket
-              </button>
+              </a>
             ) : (
-              <button className="btn btn-warning">
+              <button
+                className="btn btn-warning"
+                disabled={isPending}
+                onClick={handleUpdatePayment}
+              >
                 <Coins size={20} /> Confirm Payment
               </button>
             )}
             <form method="dialog">
               <button className="btn">Close</button>
-            </form>          </div>
+            </form>{' '}
+          </div>
         </div>
       </dialog>
     </div>
