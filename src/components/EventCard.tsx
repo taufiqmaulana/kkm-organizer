@@ -26,6 +26,7 @@ export default function EventCard({ event }: { event: Record<string, any> }) {
   const [total, setTotal] = useState({
     participant: 0,
     pending: 0,
+    received: 0,
     confirmed: 0,
   })
   useEffect(() => {
@@ -36,7 +37,10 @@ export default function EventCard({ event }: { event: Record<string, any> }) {
       setTotal({
         participant: participants.length,
         pending: participants.filter(
-          (p: any) => p['Reservation Status'] !== 'confirmed',
+          (p: any) => p['Reservation Status'] === 'Pending',
+        ).length,
+        received: participants.filter(
+          (p: any) => p['Reservation Status'] === 'received',
         ).length,
         confirmed: participants.filter(
           (p: any) => p['Reservation Status'] === 'confirmed',
@@ -73,6 +77,9 @@ export default function EventCard({ event }: { event: Record<string, any> }) {
             </span>
             <span>
               <b className="text-lg mr-1">{total.confirmed}</b>Confirmed
+            </span>
+            <span>
+              <b className="text-lg mr-1">{total.received}</b>DP 50%
             </span>
             <span>
               <b className="text-lg mr-1">{total.pending}</b>Pendings
