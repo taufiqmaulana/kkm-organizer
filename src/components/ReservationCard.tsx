@@ -1,6 +1,5 @@
 import { fixDateTimeFormat } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import {
   Calendar,
   CheckCircle,

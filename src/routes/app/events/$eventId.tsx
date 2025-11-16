@@ -50,7 +50,7 @@ function RouteComponent() {
           <input
             type="radio"
             name="status"
-            className="checkbox"
+            className="checkbox checkbox-sm"
             value="all"
             checked={status === 'all'}
             onChange={(e) => setStatus(e.target.value)}
@@ -61,7 +61,7 @@ function RouteComponent() {
           <input
             type="radio"
             name="status"
-            className="checkbox"
+            className="checkbox checkbox-sm"
             value="Pending"
             checked={status === 'Pending'}
             onChange={(e) => setStatus(e.target.value)}
@@ -72,7 +72,7 @@ function RouteComponent() {
           <input
             type="radio"
             name="status"
-            className="checkbox"
+            className="checkbox checkbox-sm"
             value="received"
             checked={status === 'received'}
             onChange={(e) => setStatus(e.target.value)}
@@ -83,7 +83,7 @@ function RouteComponent() {
           <input
             type="radio"
             name="status"
-            className="checkbox"
+            className="checkbox checkbox-sm"
             value="confirmed"
             checked={status === 'confirmed'}
             onChange={(e) => setStatus(e.target.value)}
